@@ -26,13 +26,13 @@ let game = {
 };
 let online = game.players.length;
 
-setInterval(addFruit, 6000);
+setInterval(addFruit, 100);
 
 function addFruit() {
-    if (game.fruits.length < 7) {
+    if (game.fruits.length < 1) {
         game.fruits.push({
-            x: Math.floor(Math.random() * (1 - 29)) + 29,
-            y: Math.floor(Math.random() * (1 - 29)) + 29
+            x: Math.floor(Math.random() * (1 - 59)) + 59,
+            y: Math.floor(Math.random() * (1 - 59)) + 59
         });
         for (const i in game.fruits) {
             const fruit = game.fruits[i];
@@ -56,10 +56,15 @@ io.on('connection', socket => {
         points: 0,
         lastMovement: null
     });
-    const currentPlayer = game.players.findIndex(player => player.id === socket.id);
+
+    const player_icon = socket.handshake.query.player_icon
+
+
+    const currentPlayer = game.players.findIndex(player => player.id === socket.id, player_icon);
     game.players[currentPlayer].body.push({
-        x: Math.floor(Math.random() * (1 - 29)) + 29,
-        y: Math.floor(Math.random() * (1 - 29)) + 29
+        x: Math.floor(Math.random() * (1 - 59)) + 59,
+        y: Math.floor(Math.random() * (1 - 59)) + 59,
+        player_icon
     });
 
     online = game.players.length;
@@ -67,7 +72,7 @@ io.on('connection', socket => {
     socket.emit('bootstrap', game);
     socket.broadcast.emit('newGameState', game);
 
-    const autoMove = setInterval(checkLastMovement, 500);
+    const autoMove = setInterval(checkLastMovement, 100);
 
     function checkLastMovement() {
         if (game.players[currentPlayer].lastMovement) {
@@ -83,25 +88,25 @@ io.on('connection', socket => {
                 game.players[currentPlayer].lastMovement = "ArrowUp";
                 game.players[currentPlayer].body[0].y--;
                 if (game.players[currentPlayer].body[0].y === -1)
-                    game.players[currentPlayer].body[0].y += 30;
+                    game.players[currentPlayer].body[0].y += 60;
                 break;
             case "ArrowDown":
                 game.players[currentPlayer].lastMovement = "ArrowDown";
                 game.players[currentPlayer].body[0].y++;
-                if (game.players[currentPlayer].body[0].y === 30)
-                    game.players[currentPlayer].body[0].y -= 30;
+                if (game.players[currentPlayer].body[0].y === 60)
+                    game.players[currentPlayer].body[0].y -= 60;
                 break;
             case "ArrowLeft":
                 game.players[currentPlayer].lastMovement = "ArrowLeft";
                 game.players[currentPlayer].body[0].x--;
                 if (game.players[currentPlayer].body[0].x === -1)
-                    game.players[currentPlayer].body[0].x += 30;
+                    game.players[currentPlayer].body[0].x += 60;
                 break;
             case "ArrowRight":
                 game.players[currentPlayer].lastMovement = "ArrowRight";
                 game.players[currentPlayer].body[0].x++;
-                if (game.players[currentPlayer].body[0].x === 30)
-                    game.players[currentPlayer].body[0].x -= 30;
+                if (game.players[currentPlayer].body[0].x === 60)
+                    game.players[currentPlayer].body[0].x -= 60;
                 break;
             default:
                 return;

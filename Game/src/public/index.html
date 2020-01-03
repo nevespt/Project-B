@@ -11,13 +11,43 @@
       href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
       rel="stylesheet"
     />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main>
-      <canvas id="screen" width="30" height="30"></canvas>
+      <canvas id="screen" width="60" height="60"></canvas>
       <table id="score"></table>
     </main>
+
+    <h3 class="titleGame">Seleciona uma cor, para começar a jogar.</h3>
+	<h3 id="H3PLayerName">Estás prestes a escolher:</h3>
+
+    <div class="colorsdiv">
+	<div class="playerIcon" id="pink"></div>
+	<div class="playerIcon" id="purple"></div>
+	<div class="playerIcon" id="deeppurple"></div>
+	<div class="playerIcon" id="indigo"></div>
+	<div class="playerIcon" id="blue"></div>
+	<div class="playerIcon" id="lightblue"></div>
+	<div class="playerIcon" id="cyan"></div>
+	<div class="playerIcon" id="teal"></div>
+	<div class="playerIcon" id="green"></div>
+    <div class="playerIcon" id="lightgreen"></div>
+	<div class="playerIcon" id="lime"></div>
+	<div class="playerIcon" id="yellow"></div>
+	<div class="playerIcon" id="amber"></div>
+	<div class="playerIcon" id="brown"></div>
+	<div class="playerIcon" id="grey"></div>
+	<div class="playerIcon" id="bluegrey"></div>
+    </div>
+
+    <div class="nevesptdiv"><b>Neves</b><b class="nevespt" id="orange" style="background-color: transparent !important">PT</b></div>
+
+
+
+
 
     <script type="text/javascript" src="socket.io.js"></script>
     <script type="text/javascript" src="snake.js"></script>

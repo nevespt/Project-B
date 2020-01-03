@@ -1,23 +1,113 @@
-// eslint-disable-next-line no-undef
-const socket = io(document.URL);
+    $('main').hide()
+
+    const playersNamesjson = {
+                    pink: 'Pink',
+                    purple: 'Purple',
+                    deeppurple: 'Deep Purple',
+                    indigo: 'Indigo',
+                    blue: 'Blue',
+                    lightblue: 'Light Blue',
+                    cyan: 'Cyan',
+                    teal: 'Teal',
+                    green: 'Green',
+                    lightgreen: 'Light Green',
+                    lime: 'Lime',
+                    yellow: 'Yellow',
+                    amber: 'Amber',
+                    brown: 'Brown',
+                    grey: 'Grey',
+                    bluegrey: 'Blue Grey',
+                }
+      
+      
+      
+      $('.playerIcon').hover((e)=> {
+            const nameId = $(e.target).attr('id')
+            $('#H3PLayerName').html(`Estás prestes a selecionar: <span class="${[nameId]}" id="${[nameId]}" style="background-color: transparent !important">${playersNamesjson[nameId]}</span>`)
+        })
+
+        $('.playerIcon').mouseleave((e)=> {
+            $('#H3PLayerName').html(`Estás prestes a selecionar:`)
+        })
+
+
+        $('.playerIcon').click((e)=>{
+            $('.playerIcon').hide()
+            $('.titleGame').hide()
+            $('#H3PLayerName').hide()
+            $("#screen").css({ display: "inline-block" });
+            $("#score").css({ display: "flex" });
+            $('main').show()
+            comecarAJogar($(e.target).attr('id'))
+        })
+
+
+
+function comecarAJogar(playerIconSelectedClick) {
+            let keyDownSelected = []
+		    let connected = false
+
+            const socket = io({
+                query: {
+                    player_icon: playerIconSelectedClick
+                }
+            })
+
 socket.on('connect', () => {
+    connected = true
     console.log('> Connected to server');
 });
 socket.on('disconnect', () => {
     console.log('> Disconnected');
-    if (confirm("Você foi desconectado.\nPressione OK para tentar reconectar.")) {
+    connected = false
+    if (confirm("Foste desconectado.\nPressiona OK para reconectares novamente.")) {
         location.reload();
     }
 });
+
 
 const screen = document.getElementById('screen');
 const context = screen.getContext('2d');
 let game;
 let currentPlayer;
 
+
+
 socket.on('bootstrap', (gameInitialState) => {
     game = gameInitialState;
+
+
+    const playersIconsjson = {
+                    pink: '"#fd5f00"',
+                    purple: document.getElementById('purple'),
+                    deeppurple: document.getElementById('deeppurple'),
+                    indigo: document.getElementById('indigo'),
+                    blue: document.getElementById('blue'),
+                    lightblue: document.getElementById('lightblue'),
+                    cyan: document.getElementById('cyan'),
+                    teal: document.getElementById('teal'),
+                    green: document.getElementById('green'),
+                    lightgreen: document.getElementById('lightgreen'),
+                    lime: document.getElementById('lime'),
+                    yellow: document.getElementById('yellow'),
+                    amber: document.getElementById('amber'),
+                    brown: document.getElementById('brown'),
+                    grey: document.getElementById('grey'),
+                    bluegrey: document.getElementById('bluegrey'),
+                }
+
+
+
+
+
+
+
+
+
+
+
     currentPlayer = game.players[game.players.findIndex(player => player.id === socket.id)]
+    
 
     requestAnimationFrame(renderGame);
 
@@ -32,7 +122,7 @@ socket.on('bootstrap', (gameInitialState) => {
                 context.globalAlpha = 0.20;
                 context.fillRect(player.body[j].x, player.body[j].y, 1, 1);
                 if (player.id === socket.id) {
-                    context.fillStyle = '#80e040';
+                    context.fillStyle = playersIconsjson[player.player_icon];
                     context.globalAlpha = 0.40;
                     context.fillRect(player.body[j].x, player.body[j].y, 1, 1);
                 }
@@ -41,14 +131,14 @@ socket.on('bootstrap', (gameInitialState) => {
             context.globalAlpha = 0.40;
             context.fillRect(player.body[0].x, player.body[0].y, 1, 1);
             if (player.id === socket.id) {
-                context.fillStyle = '#80e040';
+                context.fillStyle = playersIconsjson[currentPlayer.player_icon];
                 context.globalAlpha = 1;
                 context.fillRect(player.body[0].x, player.body[0].y, 1, 1);
             }
         }
         for (const i in game.fruits) {
             const fruit = game.fruits[i];
-            context.fillStyle = '#d01050';
+            context.fillStyle = '#FD5F00';
             context.globalAlpha = 1;
             context.fillRect(fruit.x, fruit.y, 1, 1);
         }
@@ -56,12 +146,13 @@ socket.on('bootstrap', (gameInitialState) => {
         requestAnimationFrame(renderGame);
     }
 
+
     function updateScoreTable() {
         const scoreTable = document.getElementById('score');
         const maxResults = 10;
         let scoreTableInnerHTML = `
             <tr class="header">
-                <td>Top 10 Jogadores</td>
+                <td>Os melhores 10 Noobs</td>
                 <td>Pontos</td>
             </tr>
             `;
@@ -114,7 +205,7 @@ socket.on('bootstrap', (gameInitialState) => {
         }
         scoreTableInnerHTML += `
             <tr class="footer">
-                <td>Total de jogadores</td>
+                <td>Total de Noobs em Jogo</td>
                 <td align="right">${game.players.length}</td>
             </tr>
             `;
@@ -130,4 +221,7 @@ socket.on('bootstrap', (gameInitialState) => {
         game = gameState;
         currentPlayer = game.players[game.players.findIndex(player => player.id === socket.id)];
     });
-});
+
+    console.log(playerIconSelectedClick)
+
+});}
